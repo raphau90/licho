@@ -1,13 +1,12 @@
 package com.raphau.licho.data
 
-abstract class Message {
+sealed class MessageToSend {
     abstract val destinationAddress: String
     abstract val scAddress: String?
 }
 
-data class SmsMessage(
+data class SmsMessageToSend(
     override val destinationAddress: String,
     override val scAddress: String?,
-    val text: String,
-    val date: Long
-) : Message()
+    val text: String
+) : MessageToSend()

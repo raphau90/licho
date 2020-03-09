@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.raphau.licho.MessagesRepository
 import com.raphau.licho.R
-import com.raphau.licho.data.SmsMessage
+import com.raphau.licho.data.SmsMessageToSend
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -31,7 +31,10 @@ class ExperimentalFragment : Fragment() {
 
         val destinationAddress = "test_number"
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
-            val message = SmsMessage(destinationAddress, null, "test")
+            val message = SmsMessageToSend(
+                destinationAddress,
+                null,
+                "test")
             messagesRepository.sendMessage(message)
         }
     }

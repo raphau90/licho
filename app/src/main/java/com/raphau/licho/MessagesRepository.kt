@@ -2,15 +2,18 @@ package com.raphau.licho
 
 import android.content.Context
 import android.telephony.SmsManager
-import com.raphau.licho.data.Message
-import com.raphau.licho.data.SmsMessage
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.raphau.licho.data.*
 
-class MessagesRepository(context: Context) {
+class MessagesRepository(val context: Context) {
+    private val SMS_URI = Uri.parse("content://sms/inbox")
+
     private val smsManager = SmsManager.getDefault()
 
-    fun sendMessage(message: Message) {
+    fun sendMessage(message: MessageToSend) {
         when (message) {
-            is SmsMessage -> smsManager.sendTextMessage(
+            is SmsMessageToSend -> smsManager.sendTextMessage(
                 message.destinationAddress,
                 message.scAddress,
                 message.text,
