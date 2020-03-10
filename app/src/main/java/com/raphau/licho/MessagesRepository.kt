@@ -8,8 +8,11 @@ import android.telephony.SmsManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.raphau.licho.data.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MessagesRepository(val context: Context) {
+@Singleton
+class MessagesRepository @Inject constructor(val context: Context) {
     private val SMS_URI = Uri.parse("content://sms/")
 
     private val smsManager = SmsManager.getDefault()
