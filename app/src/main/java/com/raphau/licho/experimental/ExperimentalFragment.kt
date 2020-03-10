@@ -9,20 +9,21 @@ import android.widget.Button
 import com.raphau.licho.MessagesRepository
 import com.raphau.licho.R
 import com.raphau.licho.data.SmsMessageToSend
+import com.raphau.licho.di.InjectableFragment
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ExperimentalFragment : Fragment() {
+class ExperimentalFragment : InjectableFragment() {
 
-    lateinit var messagesRepository: MessagesRepository
+    @Inject lateinit var messagesRepository: MessagesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        messagesRepository = MessagesRepository(inflater.context)
         return inflater.inflate(R.layout.fragment_experimental, container, false)
     }
 

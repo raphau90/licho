@@ -3,22 +3,21 @@ package com.raphau.licho.experimental
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.raphau.licho.MessagesRepository
 import com.raphau.licho.R
+import com.raphau.licho.di.InjectableActivity
 
 import kotlinx.android.synthetic.main.activity_experimental.*
+import javax.inject.Inject
 
-class ExperimentalActivity : AppCompatActivity() {
+class ExperimentalActivity : InjectableActivity() {
 
-    lateinit var messagesRepository: MessagesRepository
+    @Inject lateinit var messagesRepository: MessagesRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        messagesRepository = MessagesRepository(applicationContext)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
             != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
