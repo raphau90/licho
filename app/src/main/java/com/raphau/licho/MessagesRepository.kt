@@ -1,8 +1,10 @@
 package com.raphau.licho
 
 import android.content.Context
+import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
+import android.os.Handler
 import android.provider.Telephony
 import android.telephony.SmsManager
 import androidx.lifecycle.LiveData
@@ -17,6 +19,22 @@ class MessagesRepository @Inject constructor(val context: Context) {
 
     private val smsManager = SmsManager.getDefault()
     private val threadsLD = MutableLiveData<List<MessageThread>>()
+
+    private val smsObserver = object : ContentObserver(Handler()) {
+        override fun onChange(selfChange: Boolean) {
+            super.onChange(selfChange)
+            refreshMessages()
+        }
+    }
+
+    fun start() {
+        fetchMessages()
+        context.contentResolver.registerContentObserver(SMS_URI, true, smsObserver)
+    }
+
+    fun stop() {
+        context.contentResolver.unregisterContentObserver(smsObserver)
+    }
 
     fun sendMessage(message: MessageToSend) {
         when (message) {
@@ -33,7 +51,7 @@ class MessagesRepository @Inject constructor(val context: Context) {
         return threadsLD
     }
 
-    fun refreshMessages() {
+    private fun refreshMessages() {
         val messages = fetchMessages()
         threadsLD.postValue(messages)
     }
