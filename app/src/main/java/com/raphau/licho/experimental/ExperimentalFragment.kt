@@ -27,6 +27,10 @@ class ExperimentalFragment : InjectableFragment() {
         return inflater.inflate(R.layout.fragment_experimental, container, false)
     }
 
+    override fun onInjected() {
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

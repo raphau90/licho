@@ -1,14 +1,16 @@
 package com.raphau.licho.di
 
 import android.content.Context
-import com.raphau.licho.experimental.ExperimentalActivity
-import com.raphau.licho.experimental.ExperimentalFragment
+import com.raphau.licho.LichoApplication
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjectionModule
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component
+@Component(modules = [AndroidSupportInjectionModule::class, AndroidInjectionModule::class,
+    AndroidModule::class, ViewModelModule::class])
 interface AppComponent {
 
     @Component.Factory
@@ -16,7 +18,5 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    fun inject(activity: ExperimentalActivity)
-
-    fun inject(fragment: ExperimentalFragment)
+    fun inject(lichoApplication: LichoApplication)
 }

@@ -2,20 +2,16 @@ package com.raphau.licho.di
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.raphau.licho.LichoApplication
-import com.raphau.licho.experimental.ExperimentalFragment
+import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
 
-open class InjectableFragment: Fragment() {
+abstract class InjectableFragment: Fragment() {
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        inject((activity?.application as LichoApplication).appComponent)
+        onInjected()
     }
 
-    private fun inject(appComponent: AppComponent) {
-        when (this) {
-            is ExperimentalFragment -> appComponent.inject(this)
-            else -> throw AssertionError("This fragment instance is non-injectable")
-        }
-    }
+    abstract fun onInjected()
 }

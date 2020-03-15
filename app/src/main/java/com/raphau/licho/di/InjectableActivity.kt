@@ -2,20 +2,15 @@ package com.raphau.licho.di
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.raphau.licho.LichoApplication
-import com.raphau.licho.experimental.ExperimentalActivity
+import dagger.android.AndroidInjection
 
-open class InjectableActivity: AppCompatActivity() {
+abstract class InjectableActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        inject((application as LichoApplication).appComponent)
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        onInjected()
     }
 
-    private fun inject(appComponent: AppComponent) {
-        when (this) {
-            is ExperimentalActivity -> appComponent.inject(this)
-            else -> throw AssertionError("This activity instance is non-injectable")
-        }
-    }
+    abstract fun onInjected()
 }

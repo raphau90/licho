@@ -5,10 +5,15 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.raphau.licho.di.InjectableActivity
+import com.raphau.licho.viewmodel.MainViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : InjectableActivity() {
+
+    @Inject lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +24,10 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
+    }
+
+    override fun onInjected() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
