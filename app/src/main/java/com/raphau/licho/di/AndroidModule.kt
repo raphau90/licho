@@ -14,10 +14,10 @@ abstract class AndroidModule {
     @ContributesAndroidInjector(modules = [ViewModelModule::class])
     abstract fun contributeMainActivity(): MainActivity
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [ViewModelModule::class])
     abstract fun contributeMessagesListFragment(): MessagesListFragment
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [ViewModelModule::class])
     abstract fun contributeMessageThreadFragment(): MessageThreadFragment
 
     @ContributesAndroidInjector(modules = [ViewModelModule::class])

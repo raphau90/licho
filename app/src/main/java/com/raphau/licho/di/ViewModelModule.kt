@@ -5,6 +5,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.raphau.licho.MainActivity
+import com.raphau.licho.MessagesListFragment
+import com.raphau.licho.MessagesRepository
 import com.raphau.licho.experimental.ExperimentalActivity
 import com.raphau.licho.viewmodel.ExperimentalViewModel
 import com.raphau.licho.viewmodel.MainViewModel
@@ -17,31 +19,37 @@ import dagger.Provides
 class ViewModelModule {
 
     @Provides
-    fun provideMainViewModel(activity: MainActivity, mainInteractor: MainInteractor): MainViewModel {
-        val viewModel: MainViewModel by activity.viewModels { ViewModelFactory(mainInteractor) }
+    fun provideMainViewModel(activity: MainActivity,
+                             mainInteractor: MainInteractor,
+                             messagesRepository: MessagesRepository): MainViewModel {
+        val viewModel: MainViewModel by activity.viewModels {
+            ViewModelFactory{ MainViewModel(mainInteractor, messagesRepository) }
+        }
         return viewModel
     }
 
     @Provides
     fun provideExperimentalViewModel(activity: ExperimentalActivity,
                                      mainInteractor: MainInteractor): ExperimentalViewModel {
-        val viewModel: ExperimentalViewModel by activity.viewModels { ViewModelFactory(mainInteractor) }
+        val viewModel: ExperimentalViewModel by activity.viewModels {
+            ViewModelFactory{ ExperimentalViewModel(mainInteractor) }
+        }
         return viewModel
     }
 
     @Provides
-    fun provideMessagesListViewModel(fragment: InjectableFragment, mainInteractor: MainInteractor): MessagesListViewModel {
-        val viewModel: MessagesListViewModel by fragment.viewModels { ViewModelFactory(mainInteractor) }
+    fun provideMessagesListViewModel(fragment: MessagesListFragment,
+                                     mainInteractor: MainInteractor,
+                                     messagesRepository: MessagesRepository): MessagesListViewModel {
+        val viewModel: MessagesListViewModel by fragment.viewModels {
+            ViewModelFactory{ MessagesListViewModel(mainInteractor, messagesRepository) }
+        }
         return viewModel
     }
 
-    private class ViewModelFactory(private val mainInteractor: MainInteractor) : ViewModelProvider.Factory {
+    private class ViewModelFactory<T : ViewModel>(val producer: () -> T) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                MainViewModel::class.java -> MainViewModel(mainInteractor) as T
-                ExperimentalViewModel::class.java -> ExperimentalViewModel(mainInteractor) as T
-                else -> throw AssertionError("No such ViewModel")
-            }
+            return producer.invoke() as T
         }
     }
 }
