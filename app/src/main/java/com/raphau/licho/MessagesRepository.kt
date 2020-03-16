@@ -27,6 +27,10 @@ class MessagesRepository @Inject constructor(val context: Context) {
         }
     }
 
+    init {
+        refreshMessages()
+    }
+
     fun start() {
         fetchMessages()
         context.contentResolver.registerContentObserver(SMS_URI, true, smsObserver)
