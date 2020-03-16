@@ -31,6 +31,16 @@ class MainActivity : InjectableActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
+    }
+
     override fun onInjected() {
         viewModel.getState().observe(this, Observer {
             when (it) {
