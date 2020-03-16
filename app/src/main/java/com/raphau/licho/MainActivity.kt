@@ -2,11 +2,14 @@ package com.raphau.licho
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.raphau.licho.di.InjectableActivity
+import com.raphau.licho.di.InjectableFragment
 import com.raphau.licho.viewmodel.MainViewModel
+import com.raphau.licho.viewmodel.state.MainState
 
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -14,6 +17,8 @@ import javax.inject.Inject
 class MainActivity : InjectableActivity() {
 
     @Inject lateinit var viewModel: MainViewModel
+    private lateinit var listFragment: MessagesListFragment
+    private lateinit var threadFragment: MessagesListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +32,33 @@ class MainActivity : InjectableActivity() {
     }
 
     override fun onInjected() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        viewModel.getState().observe(this, Observer {
+            when (it) {
+                is MainState.MessagesList -> showMessagesList()
+                is MainState.ShowThread -> showThread()
+            }
+        })
+    }
+
+    private fun showMessagesList() {
+        if (!::listFragment.isInitialized) {
+            listFragment = MessagesListFragment()
+        }
+        showFragment(listFragment)
+    }
+
+    private fun showThread() {
+        if (!::threadFragment.isInitialized) {
+            listFragment = MessagesListFragment()
+        }
+        showFragment(listFragment)
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.content_main, fragment)
+            commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
