@@ -6,12 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.lifecycle.observe
 import com.raphau.licho.di.InjectableFragment
+import com.raphau.licho.viewmodel.MessagesListViewModel
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class MessagesListFragment : InjectableFragment() {
+
+    @Inject lateinit var viewModel: MessagesListViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -22,7 +27,9 @@ class MessagesListFragment : InjectableFragment() {
     }
 
     override fun onInjected() {
-
+        viewModel.getMessages().observe(this) {
+            //TODO: present messages list
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
