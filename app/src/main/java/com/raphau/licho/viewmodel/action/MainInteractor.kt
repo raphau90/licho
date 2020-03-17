@@ -6,10 +6,10 @@ import com.raphau.licho.viewmodel.state.MainState
 import java.util.*
 import javax.inject.Inject
 
-class MainInteractor @Inject constructor() : MainAction, MessagesListAction {
+class MainInteractor @Inject constructor() : MainAction, ThreadsListAction {
 
     private val stateStack = Stack<MainState>().apply {
-        push(MainState.MessagesList())
+        push(MainState.ThreadsList())
     }
     private val stateLD = MutableLiveData<MainState?>().apply {
         postValue(stateStack.peek())

@@ -11,7 +11,7 @@ interface MainAction : Action {
     fun back()
 }
 
-interface MessagesListAction : Action {
+interface ThreadsListAction : Action {
     fun showThread(id: Int)
     fun startNewThread()
 }

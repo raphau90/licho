@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.raphau.licho.di.InjectableActivity
-import com.raphau.licho.di.InjectableFragment
 import com.raphau.licho.viewmodel.MainViewModel
 import com.raphau.licho.viewmodel.state.MainState
 
@@ -17,8 +16,8 @@ import javax.inject.Inject
 class MainActivity : InjectableActivity() {
 
     @Inject lateinit var viewModel: MainViewModel
-    private lateinit var listFragment: MessagesListFragment
-    private lateinit var threadFragment: MessagesListFragment
+    private lateinit var listFragment: ThreadsListFragment
+    private lateinit var threadFragment: ThreadsListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,22 +43,22 @@ class MainActivity : InjectableActivity() {
     override fun onInjected() {
         viewModel.getState().observe(this, Observer {
             when (it) {
-                is MainState.MessagesList -> showMessagesList()
+                is MainState.ThreadsList -> showThreadsList()
                 is MainState.ShowThread -> showThread()
             }
         })
     }
 
-    private fun showMessagesList() {
+    private fun showThreadsList() {
         if (!::listFragment.isInitialized) {
-            listFragment = MessagesListFragment()
+            listFragment = ThreadsListFragment()
         }
         showFragment(listFragment)
     }
 
     private fun showThread() {
         if (!::threadFragment.isInitialized) {
-            listFragment = MessagesListFragment()
+            listFragment = ThreadsListFragment()
         }
         showFragment(listFragment)
     }

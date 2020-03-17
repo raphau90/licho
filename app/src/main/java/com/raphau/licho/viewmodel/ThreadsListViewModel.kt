@@ -5,11 +5,11 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import com.raphau.licho.MessagesRepository
 import com.raphau.licho.data.MessageThread
-import com.raphau.licho.viewmodel.action.MessagesListAction
+import com.raphau.licho.viewmodel.action.ThreadsListAction
 import javax.inject.Inject
 
-class MessagesListViewModel @Inject constructor(private val action: MessagesListAction,
-                                                private val messagesRepository: MessagesRepository) : ViewModel() {
+class ThreadsListViewModel @Inject constructor(private val action: ThreadsListAction,
+                                               private val messagesRepository: MessagesRepository) : ViewModel() {
 
     private val filteredMessagesLD = MediatorLiveData<List<MessageThread>>()
 
