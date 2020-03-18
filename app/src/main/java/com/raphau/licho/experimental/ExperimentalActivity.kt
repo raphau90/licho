@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.raphau.licho.MessagesRepository
+import com.raphau.licho.repository.MessagesRepository
 import com.raphau.licho.R
 import com.raphau.licho.data.MessageThread
 import com.raphau.licho.di.InjectableActivity

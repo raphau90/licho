@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.raphau.licho.MainActivity
 import com.raphau.licho.ThreadsListFragment
-import com.raphau.licho.MessagesRepository
+import com.raphau.licho.repository.MessagesRepository
 import com.raphau.licho.experimental.ExperimentalActivity
 import com.raphau.licho.viewmodel.ExperimentalViewModel
 import com.raphau.licho.viewmodel.MainViewModel
@@ -21,7 +21,8 @@ class ViewModelModule {
     @Provides
     fun provideMainViewModel(activity: MainActivity,
                              mainInteractor: MainInteractor,
-                             messagesRepository: MessagesRepository): MainViewModel {
+                             messagesRepository: MessagesRepository
+    ): MainViewModel {
         val viewModel: MainViewModel by activity.viewModels {
             ViewModelFactory{ MainViewModel(mainInteractor, messagesRepository) }
         }
@@ -40,7 +41,8 @@ class ViewModelModule {
     @Provides
     fun provideThreadsListViewModel(fragment: ThreadsListFragment,
                                     mainInteractor: MainInteractor,
-                                    messagesRepository: MessagesRepository): ThreadsListViewModel {
+                                    messagesRepository: MessagesRepository
+    ): ThreadsListViewModel {
         val viewModel: ThreadsListViewModel by fragment.viewModels {
             ViewModelFactory{ ThreadsListViewModel(mainInteractor, messagesRepository) }
         }

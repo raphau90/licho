@@ -1,4 +1,4 @@
-package com.raphau.licho
+package com.raphau.licho.repository
 
 import android.content.Context
 import android.database.ContentObserver
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MessagesRepository @Inject constructor(val context: Context) {
+class MessagesRepository @Inject constructor(private val context: Context) {
     private val SMS_URI = Uri.parse("content://sms/")
 
     private val smsManager = SmsManager.getDefault()

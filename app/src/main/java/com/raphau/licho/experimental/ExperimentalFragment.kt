@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.raphau.licho.MessagesRepository
+import com.raphau.licho.repository.MessagesRepository
 import com.raphau.licho.R
 import com.raphau.licho.data.SmsMessageToSend
 import com.raphau.licho.di.InjectableFragment
