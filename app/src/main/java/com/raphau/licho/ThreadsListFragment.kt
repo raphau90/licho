@@ -69,8 +69,12 @@ class ThreadsListFragment : InjectableFragment() {
             val date = view.findViewById<TextView>(R.id.date)
 
             fun setItem(thread: MessageThread) {
-                //TODO: set avatar
-                val displayName = if (!thread?.contact?.displayName.isNullOrBlank()) {
+                if (thread.contact?.thumbnailUri != null) {
+                    avatar.setImageURI(thread.contact?.thumbnailUri)
+                } else {
+                    avatar.setImageResource(R.drawable.ic_avatar)
+                }
+                val displayName = if (!thread.contact?.displayName.isNullOrBlank()) {
                     thread.contact!!.displayName
                 } else {
                     thread.address
