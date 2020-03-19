@@ -70,7 +70,12 @@ class ThreadsListFragment : InjectableFragment() {
 
             fun setItem(thread: MessageThread) {
                 //TODO: set avatar
-                address.text = thread.address
+                val displayName = if (!thread?.contact?.displayName.isNullOrBlank()) {
+                    thread.contact!!.displayName
+                } else {
+                    thread.address
+                }
+                address.text = displayName
                 val message = thread.messages.first()
                 when (message) {
                     is SmsMessage ->content.text = message.text

@@ -5,7 +5,7 @@ data class MessageThread(
     val address: String,
     val lastMessageDate: Long
 ) {
-    var personId = 0
+    var contact: Contact? = null
     val messages: List<Message> = ArrayList()
 
     fun add(message: Message) {

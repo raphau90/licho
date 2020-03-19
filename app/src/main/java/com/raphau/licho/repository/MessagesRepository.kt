@@ -14,7 +14,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MessagesRepository @Inject constructor(private val context: Context) {
+class MessagesRepository @Inject constructor(private val context: Context,
+                                             private val contactsRepository: ContactsRepository) {
     private val SMS_URI = Uri.parse("content://sms/")
 
     private val smsManager = SmsManager.getDefault()
@@ -71,15 +72,21 @@ class MessagesRepository @Inject constructor(private val context: Context) {
 
     private fun extractMessagesFromCursor(cursor: Cursor?): LinkedHashMap<Int, MessageThread> {
         val threadsMap = LinkedHashMap<Int, MessageThread>()
+        var contact: Contact? = null
         if (cursor != null && cursor.moveToFirst()) {
             var thread: MessageThread?
             var threadId: Int?
+            var contactId: Int?
             var message: Message
             var type: Message.Type
             do {
                 threadId = cursor.getInt(cursor.getColumnIndex("thread_id"))
                 thread = threadsMap[threadId]
                 type = getMessageType(cursor)
+                contactId = cursor.getInt(cursor.getColumnIndex("person"))
+                 if (contactId != contact?.id) {
+                     contact = contactsRepository.getContact(contactId)
+                }
                 message = SmsMessage(
                     cursor.getString(cursor.getColumnIndex("address")),
                     cursor.getString(cursor.getColumnIndex("body")),
@@ -87,15 +94,15 @@ class MessagesRepository @Inject constructor(private val context: Context) {
                     cursor.getString(cursor.getColumnIndex("subject")),
                     cursor.getInt(cursor.getColumnIndex("seen")) != 0,
                     type,
-                    cursor.getInt(cursor.getColumnIndex("person")),
+                    contact,
                     cursor.getString(cursor.getColumnIndex("service_center"))
                 )
                 if (thread == null) {
                     thread = MessageThread(threadId, message.destinationAddress, message.date)
                     threadsMap[threadId] = thread
                 }
-                if (thread.personId == 0 && message.personId > 0) {
-                    thread.personId = message.personId
+                if (thread.contact == null) {
+                    thread.contact = contact
                 }
                 thread.add(message)
             } while (cursor.moveToNext())

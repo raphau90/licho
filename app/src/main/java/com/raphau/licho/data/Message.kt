@@ -3,7 +3,7 @@ package com.raphau.licho.data
 abstract class Message {
     abstract val destinationAddress: String
     abstract val type: Type
-    abstract val personId: Int
+    abstract val contact: Contact?
     abstract val scAddress: String?
 
     enum class Type {
@@ -20,6 +20,6 @@ data class SmsMessage(
     val subject: String?,
     val seen: Boolean = false,
     override val type: Type,
-    override val personId: Int,
+    override val contact: Contact?,
     override val scAddress: String? = null
 ) : Message()
