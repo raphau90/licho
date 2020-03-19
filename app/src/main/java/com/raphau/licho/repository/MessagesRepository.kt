@@ -32,14 +32,9 @@ class MessagesRepository @Inject constructor(private val context: Context,
         }
     }
 
-    init {
-        GlobalScope.async {
-            refreshMessages()
-        }
-    }
-
      suspend fun start() {
-        fetchMessages()
+        val threads = fetchMessages()
+        threadsLD.postValue(threads)
         context.contentResolver.registerContentObserver(SMS_URI, true, smsObserver)
     }
 

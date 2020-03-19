@@ -12,7 +12,7 @@ class MainViewModel(private val action: MainAction,
 
     fun getState() = action.getState()
 
-    fun onStart()  {
+    fun onStart() {
         viewModelScope.launch {
             messagesRepository.start()
         }
