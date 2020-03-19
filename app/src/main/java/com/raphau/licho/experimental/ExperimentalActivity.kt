@@ -25,12 +25,14 @@ class ExperimentalActivity : InjectableActivity() {
         super.onCreate(savedInstanceState)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
             != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
             != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SEND_SMS,
-                Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS), 1)
+                Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS), 1)
         }
         setContentView(R.layout.activity_experimental)
         setSupportActionBar(toolbar)
