@@ -9,7 +9,7 @@ class ContactsRepository @Inject constructor(private val context: Context) {
 
     private val PEOPLE_URI = ContactsContract.Data.CONTENT_URI
 
-    fun getContact(id: Int): Contact? {
+     fun getContact(id: Int): Contact? {
         if (id < 1) return null
         val cursor = context.contentResolver.query(PEOPLE_URI,
             null,

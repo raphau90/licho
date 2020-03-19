@@ -14,6 +14,8 @@ import com.raphau.licho.di.InjectableActivity
 import com.raphau.licho.viewmodel.ExperimentalViewModel
 
 import kotlinx.android.synthetic.main.activity_experimental.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import javax.inject.Inject
 
 class ExperimentalActivity : InjectableActivity() {
@@ -51,7 +53,9 @@ class ExperimentalActivity : InjectableActivity() {
 
     override fun onStart() {
         super.onStart()
-        messagesRepository.start()
+        GlobalScope.async {
+            messagesRepository.start()
+        }
     }
 
     override fun onStop() {

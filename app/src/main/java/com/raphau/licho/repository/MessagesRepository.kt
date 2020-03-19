@@ -10,6 +10,8 @@ import android.telephony.SmsManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.raphau.licho.data.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,15 +26,19 @@ class MessagesRepository @Inject constructor(private val context: Context,
     private val smsObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean) {
             super.onChange(selfChange)
-            refreshMessages()
+            GlobalScope.async {
+                refreshMessages()
+            }
         }
     }
 
     init {
-        refreshMessages()
+        GlobalScope.async {
+            refreshMessages()
+        }
     }
 
-    fun start() {
+     suspend fun start() {
         fetchMessages()
         context.contentResolver.registerContentObserver(SMS_URI, true, smsObserver)
     }
@@ -56,7 +62,7 @@ class MessagesRepository @Inject constructor(private val context: Context,
         return threadsLD
     }
 
-    private fun refreshMessages() {
+    private suspend fun refreshMessages() {
         val messages = fetchMessages()
         threadsLD.postValue(messages)
     }
