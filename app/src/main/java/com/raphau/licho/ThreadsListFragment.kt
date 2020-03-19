@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raphau.licho.data.MessageThread
 import com.raphau.licho.data.SmsMessage
 import com.raphau.licho.di.InjectableFragment
+import com.raphau.licho.util.toDateString
 import com.raphau.licho.viewmodel.ThreadsListViewModel
 import kotlinx.android.synthetic.main.fragment_threads_list.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -84,7 +87,11 @@ class ThreadsListFragment : InjectableFragment() {
                 when (message) {
                     is SmsMessage ->content.text = message.text
                 }
-                date.text = thread.lastMessageDate.toString()
+                val cal = Calendar.getInstance().apply {
+                    time = Date(thread.lastMessageDate)
+                }
+
+                date.text = cal.toDateString()
             }
 
         }
