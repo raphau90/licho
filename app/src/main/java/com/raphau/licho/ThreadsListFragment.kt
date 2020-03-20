@@ -2,12 +2,11 @@ package com.raphau.licho
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +23,7 @@ import kotlin.collections.ArrayList
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ThreadsListFragment : InjectableFragment() {
+class ThreadsListFragment : InjectableFragment(), SearchView.OnQueryTextListener {
 
     @Inject lateinit var viewModel: ThreadsListViewModel
     private val threadsAdapter = ThreadsListRecyclerAdapter()
@@ -47,6 +46,18 @@ class ThreadsListFragment : InjectableFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater)
+        menuInflater.inflate(R.menu.menu_threads_list, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.setOnQueryTextListener(this)
     }
 
     private class ThreadsListRecyclerAdapter() :
@@ -78,12 +89,7 @@ class ThreadsListFragment : InjectableFragment() {
                 } else {
                     avatar.setImageResource(R.drawable.ic_avatar)
                 }
-                val displayName = if (!thread.contact?.displayName.isNullOrBlank()) {
-                    thread.contact!!.displayName
-                } else {
-                    thread.address
-                }
-                address.text = displayName
+                address.text = thread.displayName
                 val style = if (thread.isRead) {
                     Typeface.NORMAL
                 } else {
@@ -101,7 +107,13 @@ class ThreadsListFragment : InjectableFragment() {
 
                 date.text = cal.toDateString()
             }
-
         }
+    }
+
+    override fun onQueryTextSubmit(query: String?) = true
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.filter = newText.orEmpty()
+        return true
     }
 }

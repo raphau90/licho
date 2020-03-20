@@ -17,6 +17,10 @@ class ThreadsListViewModel @Inject constructor(private val action: ThreadsListAc
     private val allMessagesLD = MediatorLiveData<List<MessageThread>>()
 
     var filter: String = ""
+        set (value) {
+            field = value
+            filteredMessagesLD.postValue(filterMessages())
+        }
 
     init {
         allMessagesLD.addSource(messagesRepository.getMessages()) {
@@ -29,8 +33,10 @@ class ThreadsListViewModel @Inject constructor(private val action: ThreadsListAc
     }
 
     private fun filterMessages(): List<MessageThread> {
-        //TODO: filter messages
-        return allMessagesLD.value ?: ArrayList()
+        val allMessages = allMessagesLD.value ?: ArrayList()
+        return allMessages.filter {
+            it.displayName.contains(filter, true)
+        }
     }
 
     fun getMessages(): LiveData<List<MessageThread>> = filteredMessagesLD
