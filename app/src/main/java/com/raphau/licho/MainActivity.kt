@@ -2,8 +2,8 @@ package com.raphau.licho
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.raphau.licho.di.InjectableActivity
@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : InjectableActivity() {
+    private val PERMISSIONS_REQUEST_CODE = 1
 
     @Inject lateinit var viewModel: MainViewModel
     private lateinit var listFragment: ThreadsListFragment
@@ -47,6 +48,22 @@ class MainActivity : InjectableActivity() {
                 is MainState.ShowThread -> showThread()
             }
         })
+        viewModel.getPermissionsState().observe(this, Observer { state ->
+            if (state is PermissionsState.MissingPermissions && !state.hasRequestedAlready) {
+                ActivityCompat.requestPermissions(this, state.permissions, PERMISSIONS_REQUEST_CODE)
+            }
+        })
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            viewModel.onPermissionsChanged()
+        }
     }
 
     private fun showThreadsList() {

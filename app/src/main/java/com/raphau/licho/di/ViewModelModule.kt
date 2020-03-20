@@ -4,6 +4,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.raphau.licho.LichoPermissionsManager
 import com.raphau.licho.MainActivity
 import com.raphau.licho.ThreadsListFragment
 import com.raphau.licho.repository.MessagesRepository
@@ -21,10 +22,13 @@ class ViewModelModule {
     @Provides
     fun provideMainViewModel(activity: MainActivity,
                              mainInteractor: MainInteractor,
-                             messagesRepository: MessagesRepository
+                             messagesRepository: MessagesRepository,
+                             permissionsManager: LichoPermissionsManager
     ): MainViewModel {
         val viewModel: MainViewModel by activity.viewModels {
-            ViewModelFactory{ MainViewModel(mainInteractor, messagesRepository) }
+            ViewModelFactory{
+                MainViewModel(mainInteractor, messagesRepository, permissionsManager)
+            }
         }
         return viewModel
     }

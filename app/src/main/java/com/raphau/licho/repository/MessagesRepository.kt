@@ -1,5 +1,6 @@
 package com.raphau.licho.repository
 
+import android.Manifest
 import android.content.Context
 import android.database.ContentObserver
 import android.database.Cursor
@@ -9,6 +10,7 @@ import android.provider.Telephony
 import android.telephony.SmsManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.raphau.licho.LichoPermissionsManager
 import com.raphau.licho.data.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -17,7 +19,8 @@ import javax.inject.Singleton
 
 @Singleton
 class MessagesRepository @Inject constructor(private val context: Context,
-                                             private val contactsRepository: ContactsRepository) {
+                                             private val contactsRepository: ContactsRepository,
+                                             private val permissionsManager: LichoPermissionsManager) {
     private val SMS_URI = Uri.parse("content://sms/")
 
     private val smsManager = SmsManager.getDefault()
@@ -28,6 +31,16 @@ class MessagesRepository @Inject constructor(private val context: Context,
             super.onChange(selfChange)
             GlobalScope.async {
                 refreshMessages()
+            }
+        }
+    }
+
+    init {
+        permissionsManager.getPermissionState().observeForever {
+            if (permissionsManager.hasPermissionsGranted(Manifest.permission.READ_SMS)) {
+                GlobalScope.async {
+                    refreshMessages()
+                }
             }
         }
     }
@@ -63,6 +76,7 @@ class MessagesRepository @Inject constructor(private val context: Context,
     }
 
     private fun fetchMessages(): ArrayList<MessageThread> {
+        if (!permissionsManager.hasPermissionsGranted(Manifest.permission.READ_SMS)) return ArrayList()
         val cursor = context.contentResolver.query(SMS_URI, null, null, null, "date DESC, date_sent DESC")
         val threadsMap = extractMessagesFromCursor(cursor)
         cursor?.close()
