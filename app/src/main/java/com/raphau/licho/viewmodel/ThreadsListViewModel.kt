@@ -35,7 +35,7 @@ class ThreadsListViewModel @Inject constructor(private val action: ThreadsListAc
     private fun filterMessages(): List<MessageThread> {
         val allMessages = allMessagesLD.value ?: ArrayList()
         return allMessages.filter {
-            it.displayName.contains(filter, true)
+            (it.displayName.contains(filter, true) || it.address.contains(filter, true))
         }
     }
 
