@@ -7,6 +7,7 @@ data class MessageThread(
 ) {
     var contact: Contact? = null
     val messages: List<Message> = ArrayList()
+    var isRead = true
 
     fun add(message: Message) {
         (messages as ArrayList).add(message)

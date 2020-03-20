@@ -1,5 +1,6 @@
 package com.raphau.licho
 
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -83,6 +84,13 @@ class ThreadsListFragment : InjectableFragment() {
                     thread.address
                 }
                 address.text = displayName
+                val style = if (thread.isRead) {
+                    Typeface.NORMAL
+                } else {
+                    Typeface.BOLD
+                }
+                address.setTypeface(null, style)
+                content.setTypeface(null, style)
                 val message = thread.messages.first()
                 when (message) {
                     is SmsMessage ->content.text = message.text

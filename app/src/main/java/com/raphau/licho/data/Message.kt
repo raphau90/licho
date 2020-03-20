@@ -18,7 +18,7 @@ data class SmsMessage(
     val text: String,
     val date: Long,
     val subject: String?,
-    val seen: Boolean = false,
+    val isRead: Boolean = false,
     override val type: Type,
     override val contact: Contact?,
     override val scAddress: String? = null

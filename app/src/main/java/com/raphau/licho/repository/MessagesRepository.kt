@@ -93,7 +93,7 @@ class MessagesRepository @Inject constructor(private val context: Context,
                     cursor.getString(cursor.getColumnIndex("body")),
                     cursor.getLong(cursor.getColumnIndex("date")),
                     cursor.getString(cursor.getColumnIndex("subject")),
-                    cursor.getInt(cursor.getColumnIndex("seen")) != 0,
+                    cursor.getInt(cursor.getColumnIndex("read")) != 0,
                     type,
                     contact,
                     cursor.getString(cursor.getColumnIndex("service_center"))
@@ -104,6 +104,9 @@ class MessagesRepository @Inject constructor(private val context: Context,
                 }
                 if (thread.contact == null) {
                     thread.contact = contact
+                }
+                if (thread.isRead && !message.isRead) {
+                    thread.isRead = false
                 }
                 thread.add(message)
             } while (cursor.moveToNext())
